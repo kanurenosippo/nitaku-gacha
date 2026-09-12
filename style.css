@@ -421,6 +421,7 @@ main {
 
 .party-name-input {
   flex: 1;
+  min-width: 0;
   border: 1px solid #eadde2;
   border-radius: 10px;
   padding: 10px 12px;
