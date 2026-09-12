@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>究極の二択ガチャ</title>
+  <link rel="stylesheet" href="style.css?v=21">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="app-header" id="app-header" role="button" tabindex="0" aria-label="TOP画面に戻る">
+      <svg class="gacha-icon" viewBox="0 0 64 68" aria-hidden="true">
+        <circle cx="32" cy="24" r="19" fill="#ffe3ee" stroke="#ff4f93" stroke-width="2.5"/>
+        <circle cx="24" cy="19" r="4.5" fill="#ff4f93"/>
+        <circle cx="35" cy="15" r="4.5" fill="#a35ce0"/>
+        <circle cx="41" cy="27" r="4.5" fill="#6b8aff"/>
+        <circle cx="27" cy="31" r="4.5" fill="#ffb84f"/>
+        <rect x="13" y="42" width="38" height="21" rx="7" fill="#ff4f93"/>
+        <rect x="27" y="48" width="10" height="4" rx="2" fill="#fff"/>
+        <rect x="21" y="57" width="22" height="4" rx="2" fill="#fff"/>
+      </svg>
+      <h1>究極の二択ガチャ</h1>
+      <p class="tagline">答えのない二択で、盛り上がろう。</p>
+    </header>
+
+    <section class="about">
+      <h2>このアプリについて</h2>
+      <p>「究極の二択ガチャ」は、答えの出ないくだらない二択をガチャ形式で楽しめるアプリです。一人でも、友達とスマホを回しても楽しめます。</p>
+      <h3>遊び方</h3>
+      <ol>
+        <li>シンプルモードか、みんなで回すかを選ぶ。</li>
+        <li>「ガチャを引く」で二択を表示し、好きな方をタップして選ぶ。</li>
+        <li>みんなで回す場合は、全員が選び終わると結果が発表される。</li>
+      </ol>
+    </section>
+
+    <nav class="category-tabs" id="category-tabs"></nav>
+    <p class="tabs-hint">💡 カテゴリはいつでもタップして切り替えられます(入力中の内容は消えません)</p>
+
+    <section id="custom-panel" class="custom-panel hidden">
+      <h3 class="custom-panel-title">✏️ じぶんたちのお題を作る</h3>
+      <p class="custom-panel-hint">ここで追加したお題は、この端末(このブラウザ)にだけ保存されます。</p>
+      <div class="custom-input-row">
+        <input type="text" id="custom-input-a" class="party-name-input" placeholder="Aの選択肢" maxlength="60">
+        <span class="vs">VS</span>
+        <input type="text" id="custom-input-b" class="party-name-input" placeholder="Bの選択肢" maxlength="60">
+      </div>
+      <p id="custom-input-error" class="error-text hidden">両方の選択肢を入力してください。</p>
+
+      <div class="custom-panel-actions">
+        <button id="custom-play-now-button" class="share-button">▶ 今すぐこれで遊ぶ</button>
+        <button id="custom-add-button" class="add-name-button">+ 保存して、あとでガチャに使う</button>
+      </div>
+
+      <ul id="custom-item-list" class="custom-item-list"></ul>
+      <p id="custom-empty-hint" class="custom-empty-hint">まだ保存したお題はありません。</p>
+      <p id="custom-saved-hint" class="custom-saved-hint hidden">💡 保存できました!このまま「ガチャを引く」を押すと出てきます。</p>
+    </section>
+
+    <main>
+      <!-- モード選択画面 -->
+      <div id="screen-menu" class="screen">
+        <div class="mode-select">
+          <button id="menu-solo-button" class="mode-button">
+            <span class="mode-button-title">🎲 シンプルモード</span>
+            <span class="mode-button-desc">二択を表示して選択するだけのシンプルなモード</span>
+          </button>
+          <button id="menu-party-button" class="mode-button">
+            <span class="mode-button-title">👥 みんなで回す</span>
+            <span class="mode-button-desc">1台のスマホをみんなで回して盛り上がるモード</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ソロモード -->
+      <div id="screen-solo" class="screen hidden">
+        <button class="back-link" data-back-to="menu">← モード選択に戻る</button>
+
+        <div class="gacha-area">
+          <svg id="draw-icon" class="gacha-icon gacha-icon-button" viewBox="0 0 64 68" aria-hidden="true">
+            <circle cx="32" cy="24" r="19" fill="#ffe3ee" stroke="#ff4f93" stroke-width="2.5"/>
+            <circle cx="24" cy="19" r="4.5" fill="#ff4f93"/>
+            <circle cx="35" cy="15" r="4.5" fill="#a35ce0"/>
+            <circle cx="41" cy="27" r="4.5" fill="#6b8aff"/>
+            <circle cx="27" cy="31" r="4.5" fill="#ffb84f"/>
+            <rect x="13" y="42" width="38" height="21" rx="7" fill="#ff4f93"/>
+            <rect x="27" y="48" width="10" height="4" rx="2" fill="#fff"/>
+            <rect x="21" y="57" width="22" height="4" rx="2" fill="#fff"/>
+          </svg>
+          <button id="draw-button" class="draw-button">ガチャを引く</button>
+          <p id="draw-hint" class="draw-hint">💡 お題の種類(カテゴリ)は下から選べます</p>
+
+          <div id="solo-preview-box" class="dilemma-box hidden">
+            <p class="preview-label">👀 このお題で遊ぶ?(まだ選べません)</p>
+            <div class="options">
+              <div class="option-button option-preview" id="solo-preview-a"></div>
+              <span class="vs">VS</span>
+              <div class="option-button option-preview" id="solo-preview-b"></div>
+            </div>
+
+            <div class="after-actions">
+              <button id="solo-reroll-button" class="redraw-button">別のお題にする</button>
+              <button id="solo-confirm-button" class="share-button">このお題にする</button>
+            </div>
+          </div>
+
+          <div id="dilemma-box" class="dilemma-box hidden">
+            <div class="options">
+              <button class="option-button" id="option-a"></button>
+              <span class="vs">VS</span>
+              <button class="option-button" id="option-b"></button>
+            </div>
+
+            <p id="reaction" class="reaction hidden"></p>
+
+            <div class="after-actions hidden" id="after-actions">
+              <button id="redraw-button" class="redraw-button">もう一回引く</button>
+              <button id="share-button" class="share-button">𝕏 でシェア</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- パーティーモード: メンバー登録 -->
+      <div id="screen-party-setup" class="screen hidden">
+        <button class="back-link" data-back-to="menu">← モード選択に戻る</button>
+
+        <h2 class="screen-title">参加するメンバーを登録</h2>
+        <div id="party-name-list" class="party-name-list"></div>
+        <button id="add-name-button" class="add-name-button">+ 追加</button>
+
+        <p id="party-setup-error" class="error-text hidden">ニックネームを2人分以上入力してください。</p>
+
+        <button id="party-start-button" class="draw-button">はじめる</button>
+      </div>
+
+      <!-- パーティーモード: お題プレビュー -->
+      <div id="screen-party-preview" class="screen hidden">
+        <button class="back-link" data-back-to="menu">← モード選択に戻る</button>
+
+        <div class="gacha-area">
+          <svg id="party-draw-icon" class="gacha-icon gacha-icon-button" viewBox="0 0 64 68" aria-hidden="true">
+            <circle cx="32" cy="24" r="19" fill="#ffe3ee" stroke="#ff4f93" stroke-width="2.5"/>
+            <circle cx="24" cy="19" r="4.5" fill="#ff4f93"/>
+            <circle cx="35" cy="15" r="4.5" fill="#a35ce0"/>
+            <circle cx="41" cy="27" r="4.5" fill="#6b8aff"/>
+            <circle cx="27" cy="31" r="4.5" fill="#ffb84f"/>
+            <rect x="13" y="42" width="38" height="21" rx="7" fill="#ff4f93"/>
+            <rect x="27" y="48" width="10" height="4" rx="2" fill="#fff"/>
+            <rect x="21" y="57" width="22" height="4" rx="2" fill="#fff"/>
+          </svg>
+          <button id="party-draw-button" class="draw-button">ガチャを引く</button>
+          <p id="party-draw-hint" class="draw-hint">💡 お題の種類(カテゴリ)は下から選べます</p>
+
+          <div id="party-preview-box" class="dilemma-box hidden">
+            <p class="preview-label">👀 このお題で遊ぶ?(まだ選べません)</p>
+            <div class="options">
+              <div class="option-button option-preview" id="party-preview-a"></div>
+              <span class="vs">VS</span>
+              <div class="option-button option-preview" id="party-preview-b"></div>
+            </div>
+
+            <div class="after-actions">
+              <button id="party-reroll-button" class="redraw-button">別のお題にする</button>
+              <button id="party-confirm-button" class="share-button">このお題にする</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="back-link back-link-secondary" data-back-to="partySetup">メンバーを変更する</button>
+      </div>
+
+      <!-- パーティーモード: 順番に回答 -->
+      <div id="screen-party-play" class="screen hidden">
+        <button class="back-link" data-back-to="menu">← モード選択に戻る</button>
+
+        <p id="turn-indicator" class="turn-indicator"></p>
+        <p class="turn-hint">他の人に見えないように選んでね</p>
+
+        <div class="options">
+          <button class="option-button" id="party-option-a"></button>
+          <span class="vs">VS</span>
+          <button class="option-button" id="party-option-b"></button>
+        </div>
+      </div>
+
+      <!-- パーティーモード: 回答完了 -->
+      <div id="screen-party-ready" class="screen hidden">
+        <button class="back-link" data-back-to="menu">← モード選択に戻る</button>
+
+        <div class="ready-message">
+          <p class="ready-text">全員の回答が終わりました!</p>
+          <button id="party-reveal-button" class="draw-button">結果を見る</button>
+        </div>
+      </div>
+
+      <!-- パーティーモード: 結果発表 -->
+      <div id="screen-party-result" class="screen hidden">
+        <button class="back-link" data-back-to="menu">← モード選択に戻る</button>
+
+        <h2 class="screen-title">結果発表!</h2>
+        <p id="party-tally" class="party-tally"></p>
+        <ul id="party-answer-list" class="party-answer-list"></ul>
+
+        <div class="after-actions">
+          <button id="party-again-button" class="redraw-button">同じメンバーでもう一度</button>
+          <button id="party-share-button" class="share-button">𝕏 でシェア</button>
+        </div>
+        <button id="party-change-members-button" class="back-link">メンバーを変更する</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="dilemmas.js?v=11"></script>
+  <script src="script.js?v=14"></script>
+</body>
+</html>
