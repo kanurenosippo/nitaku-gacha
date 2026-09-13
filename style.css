@@ -67,6 +67,37 @@ main {
   margin-bottom: 0;
 }
 
+.app-footer {
+  order: 5;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.footer-link {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-decoration: underline;
+}
+
+.policy h2 {
+  margin-top: 20px;
+}
+
+.policy h2:first-child {
+  margin-top: 0;
+}
+
+.policy p {
+  margin: 0 0 4px;
+  line-height: 1.6;
+}
+
+.policy-date {
+  margin-top: 20px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
 /* カテゴリタブ・じぶんで作るパネルは、モードを選ぶ前は表示しない。
    「じぶんで作る」を始める前にモード(ソロ/パーティー)を決めてもらうことで、
    「入力したのに、どちらのモードで遊ぶか分からない」という迷いを防ぐため。 */
@@ -198,6 +229,7 @@ main {
   padding: 0;
   margin-bottom: 16px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 #party-change-members-button,
